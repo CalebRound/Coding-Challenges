@@ -1,0 +1,83 @@
+using System;
+
+namespace CodingChallenges.Week1
+{
+	public class Program
+	{
+		public void Main(string[] args)
+		{
+			Console.WriteLine("Week 1 Challenge: Count the islands\n");
+			Console.WriteLine("- The map denotes land and water tiles with a 1 and 0 respectively");
+			Console.WriteLine("- An island is one or more directly adjacent land tiles (vertically or horizontally, but not diagonally)\n");
+			Console.WriteLine("Write a function to count the number of islands on the map below:\n");
+			var map = new int[5, 5]{{1, 0, 0, 1, 1}, {0, 1, 0, 0, 0}, {0, 0, 1, 1, 0}, {0, 1, 1, 0, 0}, {1, 0, 0, 1, 1}};
+			for (var i = 0; i < map.GetLength(0); i++)
+			{
+				for (var j = 0; j < map.GetLength(1); j++)
+				{
+					Console.Write(" " + map[i, j] + " ");
+				}
+
+				Console.WriteLine();
+			}
+
+			var start = DateTime.Now;
+			for (var i = 0; i < 100000; i++)
+			{
+				CountIslands(map);
+			}
+
+			var duration = (DateTime.Now - start).TotalMilliseconds;
+			Console.WriteLine();
+			Console.WriteLine("Target count: 6");
+			Console.WriteLine("Actual count: " + CountIslands(map));
+			Console.WriteLine("Mean runtime: " + duration);
+			Console.ReadLine();
+		}
+
+		public static int CountIslands(int[, ] map)
+		{
+			var depth = map.GetLength(0);
+			var width = map.GetLength(1);
+			var count = 0;
+			for (var i = 0; i < depth; i++)
+			{
+				for (var j = 0; j < width; j++)
+				{
+					if (map[i, j] == 1)
+					{
+						count++;
+					}
+				}
+			}
+
+			for (var i = 0; i < depth - 1; i++)
+			{
+				for (var j = 0; j < width - 1; j++)
+				{
+					if (map[i, j] == 1 && map[i + 1, j] == 1)
+					{
+						count--;
+					}
+
+					if (map[i, j] == 1 && map[i, j + 1] == 1)
+					{
+						count--;
+					}
+				}
+			}
+
+			if (map[depth - 1, width - 1] == 1 && map[depth - 1, width - 2] == 1)
+			{
+				count--;
+			}
+
+			if (map[depth - 1, width - 1] == 1 && map[depth - 2, width - 1] == 1)
+			{
+				count--;
+			}
+
+			return count;
+		}
+	}
+}
